@@ -12,9 +12,10 @@ class TestOrderCreate:
     @pytest.mark.parametrize("color", COLOR_VARIANTS)
     def test_create_order_with_different_colors(self, color):
         payload = ORDER_BODY.copy()
-        if color:
-            payload["color"] = color
-        response = requests.post(ORDERS, json=payload)
-        assert response.status_code == 201
-        assert "track" in response.json()
-        assert isinstance(response.json()["track"], int)
+        payload["color"] = color
+        with allure.step("Отправляем запрос на создание заказа"):
+            response = requests.post(ORDERS, json=payload)
+        with allure.step("Проверяем код ответа и наличие track"):
+            assert response.status_code == 201
+            assert "track" in response.json()
+            assert isinstance(response.json()["track"], int)
