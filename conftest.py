@@ -1,16 +1,7 @@
 import pytest
-import requests
 from helpers.api import *
 from helpers.courier import *
-from helpers.urls import *
-
-def _delete_by_credentials(login, password):
-    try:
-        login_response = login_courier(login, password)
-        if login_response.status_code == 200:
-            delete_courier(login_response.json().get("id"))
-    except Exception:
-        pass
+from helpers.api import _delete_by_credentials
 
 @pytest.fixture
 def new_courier():
@@ -20,8 +11,7 @@ def new_courier():
     _delete_by_credentials(login, password)
 
 @pytest.fixture
-def created_courier():
+def courier_payload():
     payload = build_courier_payload()
-    response = requests.post(COURIER, data=payload)
-    yield payload, response
+    yield payload
     _delete_by_credentials(payload["login"], payload["password"])

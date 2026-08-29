@@ -24,3 +24,11 @@ def login_courier(login, password):
 def delete_courier(courier_id):
     if courier_id:
         requests.delete(f"{COURIER}/{courier_id}", timeout=20)
+
+def _delete_by_credentials(login, password):
+    try:
+        login_response = login_courier(login, password)
+        if login_response.status_code == 200:
+            delete_courier(login_response.json().get("id"))
+    except Exception:
+        pass

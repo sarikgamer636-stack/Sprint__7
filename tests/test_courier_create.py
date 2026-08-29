@@ -8,8 +8,9 @@ from helpers.urls import COURIER
 class TestCourierCreate:
 
     @allure.title("Курьера можно создать")
-    def test_create_courier_success(self, created_courier):
-        payload, response = created_courier
+    def test_create_courier_success(self, courier_payload):
+        with allure.step("Отправляем запрос на создание курьера"):
+            response = requests.post(COURIER, data=courier_payload)
         with allure.step("Проверяем код ответа и тело"):
             assert response.status_code == 201
             assert response.json() == {"ok": True}
